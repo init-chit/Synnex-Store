@@ -4,7 +4,7 @@
 -- Run this after database.sql to populate with sample data
 
 -- =============================================
--- 1. Categories (8 หมวดหมู่)
+-- 1. Categories (8 categories)
 -- =============================================
 -- Insert categories first before inserting games
 -- Mapping: 41=Action, 42=RPG, 43=Sports, 44=Racing, 45=Shooter, 46=Adventure, 47=Strategy, 48=Simulation
@@ -26,10 +26,10 @@ ON CONFLICT (category_id) DO NOTHING;
 -- Password: admin123 (hashed with bcrypt)
 -- Hash: $2b$10$neYbIDk9onO0a2lU6rJ8ieRpVXBBhEkpktTKLRP3uvG6k5W1.9SMO
 INSERT INTO users (username, email, password_hash, role, wallet_balance) VALUES
-('admin', 'admin@nickykey.com', '$2b$10$neYbIDk9onO0a2lU6rJ8ieRpVXBBhEkpktTKLRP3uvG6k5W1.9SMO', 'admin', 99999.00),
-('admin2', 'adnicky@admin.com', '$2b$10$neYbIDk9onO0a2lU6rJ8ieRpVXBBhEkpktTKLRP3uvG6k5W1.9SMO', 'admin', 99999.00),
-('seller01', 'seller@nickykey.com', '$2b$10$neYbIDk9onO0a2lU6rJ8ieRpVXBBhEkpktTKLRP3uvG6k5W1.9SMO', 'seller', 5000.00),
-('testuser', 'test@nickykey.com', '$2b$10$neYbIDk9onO0a2lU6rJ8ieRpVXBBhEkpktTKLRP3uvG6k5W1.9SMO', 'user', 1000.00)
+('admin', 'admin@synnex.store', '$2b$10$neYbIDk9onO0a2lU6rJ8ieRpVXBBhEkpktTKLRP3uvG6k5W1.9SMO', 'admin', 99999.00),
+('admin2', 'admin2@synnex.store', '$2b$10$neYbIDk9onO0a2lU6rJ8ieRpVXBBhEkpktTKLRP3uvG6k5W1.9SMO', 'admin', 99999.00),
+('seller01', 'seller@synnex.store', '$2b$10$neYbIDk9onO0a2lU6rJ8ieRpVXBBhEkpktTKLRP3uvG6k5W1.9SMO', 'seller', 5000.00),
+('testuser', 'test@synnex.store', '$2b$10$neYbIDk9onO0a2lU6rJ8ieRpVXBBhEkpktTKLRP3uvG6k5W1.9SMO', 'user', 1000.00)
 ON CONFLICT (email) DO NOTHING;
 
 -- =============================================

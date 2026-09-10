@@ -38,11 +38,15 @@ exports.register = async (req, res) => {
 
 // Log a user in.
 exports.login = async (req, res) => {
-    const email = String(req.body.email || '').trim().toLowerCase();
+    const identifier = String(req.body.email || req.body.username || '').trim();
+    const normalizedIdentifier = identifier.toLowerCase();
     const password = String(req.body.password || '');
 
     try {
-        const result = await db.query('SELECT * FROM users WHERE LOWER(email) = $1', [email]);
+        const result = await db.query(
+            'SELECT * FROM users WHERE LOWER(email) = $1 OR LOWER(username) = $1 LIMIT 1',
+            [normalizedIdentifier]
+        );
 
         if (result.rows.length === 0) {
             return res.status(400).json({ message: 'Invalid email or password' });

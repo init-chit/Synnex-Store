@@ -256,7 +256,7 @@ function Home() {
           
           <div className="relative z-10 text-center text-white px-4">
               <h2 className="text-5xl md:text-6xl font-black mb-4 drop-shadow-lg italic">ลุ้นไอดี <span className="text-yellow-400">เทพมากมาย</span></h2>
-              <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">แหล่งรวมรหัสเกมราคาถูก บริการเติมเกม 24 ชม. ปลอดภัย 100%</p>
+              <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">Affordable game keys and 24/hr Services. 100% secure.</p>
               
               <button 
                 onClick={() => navigate('/gacha')}

@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
 const replacements = [
-  ['NICKKEY', 'SYNNEX'],
-  ['NICKYKEY', 'SYNNEX'],
-  ['NickyKey', 'SYNNEX'],
-  ['NICKKEY STORE', 'SYNNEX'],
-  ['NICKYKEY STORE', 'SYNNEX'],
-  ['NickyKey Store', 'SYNNEX'],
+  ['SYNNEX', 'SYNNEX'],
+  ['SYNNEX', 'SYNNEX'],
+  ['SYNNEX', 'SYNNEX'],
+  ['SYNNEX STORE', 'SYNNEX'],
+  ['SYNNEX STORE', 'SYNNEX'],
+  ['SYNNEX Store', 'SYNNEX'],
   ['GAME STORE CENTER', 'DIGITAL GAME STORE'],
   ['กรุณาเข้าสู่ระบบก่อน', 'Please log in first'],
   ['กรุณาล็อกอินก่อน', 'Please log in first'],
@@ -77,7 +77,7 @@ const replacements = [
   ['คลิกเพื่อสุ่ม', 'Click to draw'],
   ['ลุ้นไอดี', 'Win game IDs'],
   ['เทพมากมาย', 'Amazing game accounts'],
-  ['แหล่งรวมรหัสเกมราคาถูก บริการเติมเกม 24 ชม. ปลอดภัย 100%', 'Affordable game keys and 24/7 top-up service. 100% secure.'],
+  ['แหล่งรวมรหัสเกมราคาถูก บริการเติมเกม 24 ชม. ปลอดภัย 100%', 'Affordable game keys and 24/hr Services. 100% secure.'],
   ['ประวัติการสั่งซื้อ', 'Order history'],
   ['ประวัติการสั่งซื้อ & คลังของฉัน', 'Order history & My inventory'],
   ['คลังของฉัน', 'My inventory'],

@@ -133,7 +133,7 @@ function Navbar() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
             <span className="hidden md:inline">🎮 ติดต่อเรา | Facebook Fanpage</span>
-            <span className="text-red-200">บริการ 24 ชั่วโมง</span>
+            <span className="text-red-200">24/hr Services</span>
           </div>
           <div className="flex items-center gap-4">
             {user ? (
@@ -173,7 +173,7 @@ function Navbar() {
               </div>
               <div className="flex flex-col">
                 <h1 className="text-2xl font-black tracking-tighter text-gray-900 italic leading-none">
-                  NICKY<span className="text-red-600">KEY</span>
+                  SYNNEX
                 </h1>
                 <p className="text-[10px] font-bold text-gray-400 tracking-[0.25em] group-hover:text-red-600 transition">
                   GAME STORE CENTER
