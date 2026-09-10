@@ -4,7 +4,7 @@ Synnex Store is a full-stack digital game-key marketplace built with React, Node
 
 ## Initial administrator login
 
-The administrator credentials are controlled by the server environment. Copy `.env.example` to `.env` and set `INITIAL_ADMIN_USERNAME`, `INITIAL_ADMIN_EMAIL`, and `INITIAL_ADMIN_PASSWORD` (at least 12 characters). Docker reads these values from the **root `.env`**; local backend development reads them from `backend/.env`.
+The administrator credentials are controlled by the server environment. Copy `.env.example` to `.env` and set `INITIAL_ADMIN_USERNAME`, `INITIAL_ADMIN_EMAIL`, and `INITIAL_ADMIN_PASSWORD` (8–16 characters). Docker reads these values from the **root `.env`**; local backend development reads them from `backend/.env`.
 
 On startup, the idempotent bootstrap creates or synchronizes the administrator from those values:
 

@@ -17,8 +17,8 @@ async function main() {
     throw new Error('INITIAL_ADMIN_USERNAME, INITIAL_ADMIN_EMAIL and INITIAL_ADMIN_PASSWORD must all be set together.');
   }
 
-  if (password.length < 12) {
-    throw new Error('INITIAL_ADMIN_PASSWORD must be at least 12 characters long.');
+  if (password.length < 8 || password.length > 16) {
+    throw new Error('INITIAL_ADMIN_PASSWORD must be between 8 and 16 characters long.');
   }
 
   const normalizedEmail = email.trim().toLowerCase();
