@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const bcrypt = require('bcryptjs');
 const db = require('../db');
 
@@ -19,9 +21,10 @@ async function main() {
     throw new Error('INITIAL_ADMIN_PASSWORD must be at least 12 characters long.');
   }
 
+  const normalizedEmail = email.trim().toLowerCase();
   const existing = await db.query(
-    'SELECT user_id, username, email, role FROM users WHERE username = $1 OR email = $2 LIMIT 1',
-    [username, email]
+    'SELECT user_id, username, email, role FROM users WHERE username = $1 OR LOWER(email) = $2 LIMIT 1',
+    [username.trim(), normalizedEmail]
   );
 
   const passwordHash = await bcrypt.hash(password, 12);
@@ -32,19 +35,19 @@ async function main() {
       `UPDATE users
        SET username = $1, email = $2, password_hash = $3, role = 'admin'
        WHERE user_id = $4`,
-      [username, email, passwordHash, user.user_id]
+      [username.trim(), normalizedEmail, passwordHash, user.user_id]
     );
-    console.log(`Initial admin ${username} verified and credentials synchronized.`);
+    console.log(`Initial admin ${username.trim()} verified and credentials synchronized.`);
     return;
   }
 
   await db.query(
     `INSERT INTO users (username, email, password_hash, role)
      VALUES ($1, $2, $3, 'admin')`,
-    [username, email, passwordHash]
+    [username.trim(), normalizedEmail, passwordHash]
   );
 
-  console.log(`Initial admin ${username} created successfully.`);
+  console.log(`Initial admin ${username.trim()} created successfully.`);
 }
 
 main()
