@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import Home from './pages/Home'; 
+import Home from './pages/Home';
 import TopUp from './pages/TopUp';
 import Gacha from './pages/Gacha';
 import Inventory from './pages/Inventory';
@@ -13,6 +13,7 @@ import Categories from './pages/Categories';
 import OrderHistory from './pages/OrderHistory';
 import CompareGames from './pages/CompareGames';
 import ToastContainer from './components/ToastContainer';
+import ThemeToggle from './components/ThemeToggle';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/orders" element={<OrderHistory />} />
         <Route path="/compare" element={<CompareGames />} />
       </Routes>
+      <ThemeToggle />
       <ToastContainer />
     </>
   );
