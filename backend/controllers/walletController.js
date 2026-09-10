@@ -1,19 +1,12 @@
 const db = require('../db');
 
-// 1. ดึงยอดเงินปัจจุบัน
 exports.getMyWallet = async (req, res) => {
     try {
-        const user_id = req.user.user_id;
-        
-        // แก้บรรทัดนี้: เพิ่มคำว่า ", role" เข้าไปใน SQL
         const result = await db.query(
-            'SELECT user_id, username, email, wallet_balance, last_daily_claim, role FROM users WHERE user_id = $1', 
-            [user_id]
+            'SELECT user_id, username, email, wallet_balance, last_daily_claim, role FROM users WHERE user_id = $1',
+            [req.user.user_id]
         );
-        
-        if (result.rows.length === 0) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+        if (result.rows.length === 0) return res.status(404).json({ message: 'User not found' });
         res.json(result.rows[0]);
     } catch (err) {
         console.error(err);
@@ -21,79 +14,62 @@ exports.getMyWallet = async (req, res) => {
     }
 };
 
-// 2. เติมเงิน (Simulation)
 exports.topUp = async (req, res) => {
-    const { amount } = req.body;
+    const amount = Number(req.body.amount);
+    const { method, reference_id } = req.body;
     const user_id = req.user.user_id;
 
-    if (!amount || amount <= 0) {
-        return res.status(400).json({ message: 'ยอดเงินต้องมากกว่า 0' });
+    if (!Number.isFinite(amount) || amount < 1000) {
+        return res.status(400).json({ message: 'Minimum top-up amount is 1,000 MMK.' });
+    }
+    if (!method || !String(reference_id || '').trim()) {
+        return res.status(400).json({ message: 'Payment method and payment reference are required.' });
     }
 
     try {
-        await db.query('BEGIN');
-
-        await db.query(
-            'UPDATE users SET wallet_balance = wallet_balance + $1 WHERE user_id = $2',
-            [amount, user_id]
+        const result = await db.query(
+            `INSERT INTO topup_history (user_id, amount, method, status, reference_id)
+             VALUES ($1, $2, $3, 'pending', $4) RETURNING topup_id, amount, method, status, reference_id, created_at`,
+            [user_id, amount, String(method).trim(), String(reference_id).trim()]
         );
-
-        await db.query(
-            'INSERT INTO topup_history (user_id, amount, status, method) VALUES ($1, $2, $3, $4)',
-            [user_id, amount, 'completed', 'simulation']
-        );
-
-        await db.query('COMMIT');
-
-        res.json({ message: `เติมเงิน ${amount} บาท สำเร็จ!` });
-
+        res.status(201).json({ message: 'Top-up submitted for admin approval.', topup: result.rows[0] });
     } catch (err) {
-        await db.query('ROLLBACK');
         console.error(err);
-        res.status(500).json({ message: 'Topup failed' });
+        res.status(500).json({ message: 'Top-up submission failed' });
     }
 };
 
-// 3. รับเงินฟรีประจำวัน (Daily Reward) <--- ฟังก์ชันนี้แหละที่หายไป
 exports.dailyCheckIn = async (req, res) => {
     const user_id = req.user.user_id;
-    const REWARD_AMOUNT = 5.00; // แจกฟรี 5 บาท
-
+    const REWARD_AMOUNT = 5.00;
+    const client = await db.pool.connect();
     try {
-        // A. เช็คเวลาล่าสุด
-        const userRes = await db.query('SELECT last_daily_claim FROM users WHERE user_id = $1', [user_id]);
+        await client.query('BEGIN');
+        const userRes = await client.query('SELECT last_daily_claim FROM users WHERE user_id = $1 FOR UPDATE', [user_id]);
+        if (!userRes.rows[0]) {
+            await client.query('ROLLBACK');
+            return res.status(404).json({ message: 'User not found' });
+        }
         const lastClaim = userRes.rows[0].last_daily_claim;
-
         if (lastClaim) {
-            const now = new Date();
-            const last = new Date(lastClaim);
-            const diffTime = Math.abs(now - last);
-            const diffHours = diffTime / (1000 * 60 * 60); // แปลงเป็นชั่วโมงแบบทศนิยม
-
+            const diffHours = (Date.now() - new Date(lastClaim).getTime()) / 3600000;
             if (diffHours < 24) {
-                const waitHours = Math.ceil(24 - diffHours);
-                return res.status(400).json({ message: `ใจเย็นวัยรุ่น! รออีก ${waitHours} ชั่วโมงนะ` });
+                await client.query('ROLLBACK');
+                return res.status(400).json({ message: `Daily reward is not available yet. Try again in ${Math.ceil(24 - diffHours)} hours.` });
             }
         }
-
-        // B. แจกเงิน
-        await db.query('BEGIN');
-        
-        // อัปเดตเงิน + เวลาล่าสุด (NOW())
-        await db.query('UPDATE users SET wallet_balance = wallet_balance + $1, last_daily_claim = NOW() WHERE user_id = $2', [REWARD_AMOUNT, user_id]);
-        
-        await db.query(
+        await client.query('UPDATE users SET wallet_balance = wallet_balance + $1, last_daily_claim = NOW() WHERE user_id = $2', [REWARD_AMOUNT, user_id]);
+        await client.query(
             `INSERT INTO topup_history (user_id, amount, method, status) VALUES ($1, $2, 'daily_reward', 'completed')`,
             [user_id, REWARD_AMOUNT]
         );
-
-        await db.query('COMMIT');
-
-        res.json({ message: `ยินดีด้วย! คุณได้รับเงินฟรี ฿${REWARD_AMOUNT}` });
-
+        await client.query('COMMIT');
+        res.json({ message: `Congratulations! You received ${REWARD_AMOUNT.toFixed(2)} MMK.` });
     } catch (err) {
-        await db.query('ROLLBACK');
+        await client.query('ROLLBACK').catch(() => {});
         console.error(err);
         res.status(500).json({ message: 'Server error' });
+    } finally {
+        client.release();
     }
 };
