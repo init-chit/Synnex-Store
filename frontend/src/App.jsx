@@ -16,11 +16,13 @@ import CompareGames from './pages/CompareGames';
 import ToastContainer from './components/ToastContainer';
 import ThemeToggle from './components/ThemeToggle';
 import BrandingGuard from './components/BrandingGuard';
+import EnglishUiGuard from './components/EnglishUiGuard';
 
 function App() {
   return (
     <>
       <BrandingGuard />
+      <EnglishUiGuard />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
