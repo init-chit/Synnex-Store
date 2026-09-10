@@ -7,6 +7,7 @@ import Gacha from './pages/Gacha';
 import Inventory from './pages/Inventory';
 import Admin from './pages/Admin';
 import AdminPaymentMethods from './pages/AdminPaymentMethods';
+import AdminTopUps from './pages/AdminTopUps';
 import Profile from './pages/Profile';
 import GameDetail from './pages/GameDetail';
 import AllGames from './pages/AllGames';
@@ -32,6 +33,7 @@ function App() {
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/payment-methods" element={<AdminPaymentMethods />} />
+        <Route path="/admin/topups" element={<AdminTopUps />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/games" element={<AllGames />} />
         <Route path="/games/:id" element={<GameDetail />} />
