@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 
 const replacements = [
+  ['Copyright © 2025 GameKey Market. All rights reserved.', 'Copyright © 2025 SYNNEX. All rights reserved.'],
+  ['GameKey Market', 'SYNNEX'],
+  ['GAMEKEY MARKET', 'SYNNEX'],
+  ['GameKey market', 'SYNNEX'],
+  ['gamekey market', 'SYNNEX'],
   ['แหล่งรวมรหัสgamesPriceถูก บริการเติมgames 24 ชม. ปลอดภัย 100%', 'Affordable game keys, 24/7 top-up service, 100% secure'],
   ['แหล่งรวมรหัสเกมราคาถูก บริการเติมเกม 24 ชม. ปลอดภัย 100%', 'Affordable game keys, 24/7 top-up service, 100% secure'],
   ['ลุ้นไอGood Amazing game accounts', 'Win Amazing Game Accounts'],
@@ -46,6 +51,11 @@ export default function EnglishUiGuard() {
           const next = translate(value);
           if (next !== value) element.setAttribute(attribute, next);
         });
+      });
+      if (document.title) document.title = translate(document.title);
+      document.querySelectorAll('meta[name="description"], meta[property="og:title"], meta[property="og:description"]').forEach((element) => {
+        const value = element.getAttribute('content');
+        if (value) element.setAttribute('content', translate(value));
       });
     };
 
