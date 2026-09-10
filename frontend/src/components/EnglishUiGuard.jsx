@@ -1,8 +1,13 @@
 import { useEffect } from 'react';
 
 const replacements = [
+  ['NICKKEY', 'SYNNEX'],
+  ['NICKYKEY', 'SYNNEX'],
+  ['NickyKey', 'SYNNEX'],
   ['แหล่งรวมรหัสgamesPriceถูก บริการเติมgames 24 ชม. ปลอดภัย 100%', 'Affordable game keys, 24/7 top-up service, 100% secure'],
   ['แหล่งรวมรหัสเกมราคาถูก บริการเติมเกม 24 ชม. ปลอดภัย 100%', 'Affordable game keys, 24/7 top-up service, 100% secure'],
+  ['บริการ 24 ชั่วโมง', '24/hr Services'],
+  ['บริการเติมเกม 24 ชม.', '24/hr Services'],
   ['ลุ้นไอGood Amazing game accounts', 'Win Amazing Game Accounts'],
   ['ลุ้นไอ', 'Win'],
   ['ไอGoodgamesออนไลน์', 'Online Game IDs'],
