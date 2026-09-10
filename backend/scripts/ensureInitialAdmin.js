@@ -24,18 +24,20 @@ async function main() {
     [username, email]
   );
 
+  const passwordHash = await bcrypt.hash(password, 12);
+
   if (existing.rows.length > 0) {
     const user = existing.rows[0];
-    if (user.role !== 'admin') {
-      await db.query('UPDATE users SET role = $1 WHERE user_id = $2', ['admin', user.user_id]);
-      console.log(`Existing user ${user.username} promoted to admin.`);
-    } else {
-      console.log(`Admin ${user.username} already exists; no password changes were made.`);
-    }
+    await db.query(
+      `UPDATE users
+       SET username = $1, email = $2, password_hash = $3, role = 'admin'
+       WHERE user_id = $4`,
+      [username, email, passwordHash, user.user_id]
+    );
+    console.log(`Initial admin ${username} verified and credentials synchronized.`);
     return;
   }
 
-  const passwordHash = await bcrypt.hash(password, 12);
   await db.query(
     `INSERT INTO users (username, email, password_hash, role)
      VALUES ($1, $2, $3, 'admin')`,
