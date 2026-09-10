@@ -30,8 +30,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:-change-me}
       DB_PORT: 5432
       JWT_SECRET: ${JWT_SECRET:-change-this-secret}
-      BASE_URL: ${BASE_URL:-http://localhost}
-      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      BASE_URL: ${BASE_URL:-http://localhost:3000}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
     depends_on:
       db:
         condition: service_healthy
@@ -57,7 +57,7 @@ services:
       backend:
         condition: service_healthy
     ports:
-      - "80:80"
+      - "3000:80"
 
 volumes:
   postgres_data:
