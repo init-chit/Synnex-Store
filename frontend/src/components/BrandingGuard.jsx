@@ -1,8 +1,15 @@
 import { useEffect } from 'react';
 
 const replacements = [
-  ['NICKYKEY', 'SYNNEX STORE'],
-  ['NickyKey', 'Synnex Store'],
+  ['NICKYKEY', 'SYNNEX'],
+  ['NICKY Key', 'SYNNEX'],
+  ['NiCKYKEY', 'SYNNEX'],
+  ['NiCKY Key', 'SYNNEX'],
+  ['NickyKey', 'SYNNEX'],
+  ['Nickykey', 'SYNNEX'],
+  ['Nicky Key', 'SYNNEX'],
+  ['NICKYKEY STORE', 'SYNNEX'],
+  ['NICKYKEY', 'SYNNEX'],
   ['GAME STORE CENTER', 'DIGITAL GAME STORE'],
   ['กรุณาเข้าสู่ระบบก่อน', 'Please log in first'],
   ['กรุณาล็อกอินก่อน', 'Please log in first'],
@@ -54,17 +61,14 @@ const replacements = [
   ['ชื่อ A-Z', 'Name A-Z'],
   ['ใหม่ล่าสุด', 'Newest'],
   ['กลับหน้าหลัก', 'Back to home'],
-  ['กลับหน้าหลัก', 'Back to home'],
   ['หมวดหมู่เกม', 'Game Categories'],
   ['เลือกหมวดหมู่ที่คุณสนใจ', 'Choose a category you are interested in'],
   ['เกม', 'games'],
-  ['พบ ', 'Found '],
   ['เกมในหมวดหมู่นี้', ' games in this category'],
   ['ยังไม่มีเกมในหมวดหมู่นี้', 'No games in this category yet'],
   ['ดูเพิ่ม', 'View details'],
   ['ไอดีเกมออนไลน์ทั้งหมด', 'All Game IDs'],
   ['เลือกซื้อเกมที่คุณชอบ มีให้เลือก ', 'Choose your favorite games. '],
-  ['เกม', ' games'],
   ['ทุกแพลตฟอร์ม', 'All platforms'],
   ['เรียงตามค่าเริ่มต้น', 'Sort by default'],
   ['ราคา: ต่ำ → สูง', 'Price: Low → High'],
@@ -86,15 +90,12 @@ const replacements = [
   ['การแจ้งเตือน', 'Notifications'],
   ['บริการ 24 ชั่วโมง', '24-hour service'],
   ['ติดต่อเรา | Facebook Fanpage', 'Contact us | Facebook Fanpage'],
-  ['ประวัติการสั่งซื้อ', 'Order history'],
   ['กำลังโหลด...', 'Loading...'],
   ['กำลังโหลดข้อมูล...', 'Loading data...'],
   ['ยังไม่มีประวัติการซื้อ (ไปช้อปก่อนสิ!)', 'No purchase history yet. Start shopping!'],
   ['วันที่', 'Date'],
   ['รายการ / รายละเอียด', 'Item / Details'],
   ['ราคา', 'Price'],
-  ['Action', 'Action'],
-  ['คัดลอก', 'Copy'],
   ['ยอดซื้อรวม', 'Total spent'],
   ['จำนวนคำสั่งซื้อ', 'Orders'],
   ['คำสั่งซื้อที่สำเร็จ', 'Completed orders'],
@@ -108,7 +109,6 @@ const replacements = [
   ['ไม่ระบุชื่อเกม', 'Unnamed game'],
   ['รีวิว', 'Reviews'],
   ['เขียนรีวิว', 'Write a review'],
-  ['ยกเลิก', 'Cancel'],
   ['คะแนน', 'Rating'],
   ['ความคิดเห็น', 'Comment'],
   ['เขียนรีวิวของคุณ...', 'Write your review...'],
@@ -138,26 +138,28 @@ const replacements = [
   ['เติมเงินล้มเหลว', 'Top-up failed'],
 ];
 
+const translate = (value) => replacements.reduce((text, [from, to]) => text.split(from).join(to), value);
+
 const replaceAttributes = (element) => {
   ['placeholder', 'title', 'aria-label', 'alt'].forEach((attribute) => {
     const value = element.getAttribute?.(attribute);
     if (!value) return;
-    let next = value;
-    replacements.forEach(([from, to]) => { next = next.split(from).join(to); });
+    const next = translate(value);
     if (next !== value) element.setAttribute(attribute, next);
   });
 };
 
 export default function BrandingGuard() {
   useEffect(() => {
+    document.title = 'Synnex Store — Digital Game Store';
+
     const replaceText = () => {
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       const nodes = [];
       while (walker.nextNode()) nodes.push(walker.currentNode);
       nodes.forEach((node) => {
-        let value = node.nodeValue;
-        replacements.forEach(([from, to]) => { value = value.split(from).join(to); });
-        if (value !== node.nodeValue) node.nodeValue = value;
+        const next = translate(node.nodeValue);
+        if (next !== node.nodeValue) node.nodeValue = next;
       });
       document.querySelectorAll('input, textarea, select, button, img, [aria-label], [title]').forEach(replaceAttributes);
     };
