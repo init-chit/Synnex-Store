@@ -29,7 +29,7 @@ function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-black flex items-center justify-center p-4 relative overflow-hidden">
-      <button onClick={() => navigate(-1)} className="absolute top-5 left-5 z-20 inline-flex items-center gap-2 rounded-lg bg-black/30 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-black/50" aria-label="Go back">
+      <button onClick={() => navigate('/')} className="absolute top-5 left-5 z-20 inline-flex items-center gap-2 rounded-lg bg-black/30 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-black/50" aria-label="Go back">
         <ArrowLeft className="w-4 h-4" /> Back
       </button>
       <div className="absolute inset-0 opacity-10"><div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.18) 1px, transparent 0)', backgroundSize: '60px 60px' }} /></div>
