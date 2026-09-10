@@ -13,6 +13,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const recommendationRoutes = require('./routes/recommendationRoutes');
+const paymentMethodRoutes = require('./routes/paymentMethodRoutes');
 const path = require('path');
 
 dotenv.config();
@@ -39,6 +40,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/payment-methods', paymentMethodRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/health', async (req, res) => {
