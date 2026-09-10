@@ -1,11 +1,6 @@
 import { useEffect } from 'react';
 
 const replacements = [
-  ['Copyright © 2025 GameKey Market. All rights reserved.', 'Copyright © 2025 SYNNEX. All rights reserved.'],
-  ['GameKey Market', 'SYNNEX'],
-  ['GAMEKEY MARKET', 'SYNNEX'],
-  ['GameKey market', 'SYNNEX'],
-  ['gamekey market', 'SYNNEX'],
   ['แหล่งรวมรหัสgamesPriceถูก บริการเติมgames 24 ชม. ปลอดภัย 100%', 'Affordable game keys, 24/7 top-up service, 100% secure'],
   ['แหล่งรวมรหัสเกมราคาถูก บริการเติมเกม 24 ชม. ปลอดภัย 100%', 'Affordable game keys, 24/7 top-up service, 100% secure'],
   ['ลุ้นไอGood Amazing game accounts', 'Win Amazing Game Accounts'],
@@ -30,6 +25,33 @@ const replacements = [
   ['รอ Admin เพิ่มเกมเข้ามาในระบบ', 'Waiting for the admin to add games to the store'],
   ['Game ID Shop', 'Game ID Shop'],
   ['Profile & Stock', 'Profile & Inventory'],
+  ['กลับหน้าหลัก', 'Back to Home'],
+  ['กลับ', 'Back'],
+  ['กำลังโหลดตู้กาชา...', 'Loading gacha boxes...'],
+  ['วัดดวงเสี่ยงโชค ลุ้นรับรหัสเทพในราคาหลักสิบ!', 'Test your luck and win premium game codes at low prices!'],
+  ['กรุณาเข้าสู่ระบบก่อนสุ่ม', 'Please sign in before spinning'],
+  ['ยืนยันการสุ่มในราคา', 'Confirm spin for'],
+  ['บาท', 'MMK'],
+  ['กำลังสุ่ม...', 'Spinning...'],
+  ['สุ่มเลย!', 'Spin Now!'],
+  ['ลุ้นรับรางวัลใหญ่!', 'Win a grand prize!'],
+  ['เกิดข้อผิดพลาดในการสุ่ม', 'An error occurred while spinning'],
+  ['เกลือจ้า! คุณได้:', 'Better luck next time! You won:'],
+  ['ยินดีด้วย!! คุณได้:', 'Congratulations! You won:'],
+  ['เพิ่มเกมเพื่อเปรียบเทียบ', 'Add games to compare'],
+  ['เพิ่มgamesเพื่อเปรียบเทียบ', 'Add games to compare'],
+  ['ยังไม่มีเกมที่เลือก', 'No games selected'],
+  ['ยังไม่มีgamesที่เลือก', 'No games selected'],
+  ['เพิ่มเกมเพื่อเริ่มเปรียบเทียบ', 'Add games to start comparing'],
+  ['เพิ่มgamesเพื่อเริ่มเปรียบเทียบ', 'Add games to start comparing'],
+  ['เกมสูงสุด 3 เกม', 'Up to 3 games'],
+  ['เปรียบเทียบสูงสุด 3 เกม', 'Compare up to 3 games'],
+  ['เปรียบเทียบgamesสูงสุด 3 games', 'Compare up to 3 games'],
+  ['Copyright © 2025 GameKey Market. All rights reserved.', 'Copyright © 2025 SYNNEX. All rights reserved.'],
+  ['GameKey Market', 'SYNNEX'],
+  ['GAMEKEY MARKET', 'SYNNEX'],
+  ['GameKey market', 'SYNNEX'],
+  ['gamekey market', 'SYNNEX'],
 ];
 
 const translate = (value) => replacements.reduce((text, [from, to]) => text.split(from).join(to), value);
@@ -53,9 +75,11 @@ export default function EnglishUiGuard() {
         });
       });
       if (document.title) document.title = translate(document.title);
-      document.querySelectorAll('meta[name="description"], meta[property="og:title"], meta[property="og:description"]').forEach((element) => {
-        const value = element.getAttribute('content');
-        if (value) element.setAttribute('content', translate(value));
+      document.querySelectorAll('meta').forEach((element) => {
+        const content = element.getAttribute('content');
+        if (!content) return;
+        const next = translate(content);
+        if (next !== content) element.setAttribute('content', next);
       });
     };
 
