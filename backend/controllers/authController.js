@@ -1,18 +1,21 @@
 const db = require('../db');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken'); 
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-// 1. ฟังก์ชันสมัครสมาชิก
+// Register a new user.
 exports.register = async (req, res) => {
-    const { username, email, password } = req.body;
+    const username = String(req.body.username || '').trim();
+    const email = String(req.body.email || '').trim().toLowerCase();
+    const password = String(req.body.password || '');
+
     try {
         const userCheck = await db.query(
-            'SELECT * FROM users WHERE username = $1 OR email = $2', 
+            'SELECT * FROM users WHERE username = $1 OR LOWER(email) = $2',
             [username, email]
         );
         if (userCheck.rows.length > 0) {
-            return res.status(400).json({ message: 'Username or Email already exists' });
+            return res.status(400).json({ message: 'Username or email already exists' });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -33,69 +36,67 @@ exports.register = async (req, res) => {
     }
 };
 
-// 2. ฟังก์ชันเข้าสู่ระบบ
+// Log a user in.
 exports.login = async (req, res) => {
-    const { email, password } = req.body;
+    const email = String(req.body.email || '').trim().toLowerCase();
+    const password = String(req.body.password || '');
 
     try {
-        const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-        
+        const result = await db.query('SELECT * FROM users WHERE LOWER(email) = $1', [email]);
+
         if (result.rows.length === 0) {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        const user = result.rows[0]; 
-
+        const user = result.rows[0];
         const validPassword = await bcrypt.compare(password, user.password_hash);
         if (!validPassword) {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
         const token = jwt.sign(
-            { 
-                user_id: user.user_id, 
-                role: user.role 
+            {
+                user_id: user.user_id,
+                role: user.role
             },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' } 
+            { expiresIn: '1h' }
         );
 
         res.json({
             message: 'Login successful!',
-            token: token,
+            token,
             user: {
                 id: user.user_id,
                 username: user.username,
                 email: user.email,
-                role: user.role 
+                role: user.role
             }
         });
-
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });
     }
-}; // <--- ปิดปีกกา login ตรงนี้ (อย่าลืม!)
+};
 
-// 3. ฟังก์ชันเปลี่ยนรหัสผ่าน (แยกออกมาข้างนอก)
+// Change the authenticated user's password.
 exports.changePassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
     const user_id = req.user.user_id;
 
     try {
         const userRes = await db.query('SELECT password_hash FROM users WHERE user_id = $1', [user_id]);
-        if (userRes.rows.length === 0) return res.status(404).json({ message: 'ไม่พบผู้ใช้' });
+        if (userRes.rows.length === 0) return res.status(404).json({ message: 'User not found' });
 
         const validPassword = await bcrypt.compare(oldPassword, userRes.rows[0].password_hash);
-        if (!validPassword) return res.status(400).json({ message: 'รหัสผ่านเดิมไม่ถูกต้อง' });
+        if (!validPassword) return res.status(400).json({ message: 'Current password is incorrect' });
 
         const salt = await bcrypt.genSalt(10);
         const newHash = await bcrypt.hash(newPassword, salt);
 
         await db.query('UPDATE users SET password_hash = $1 WHERE user_id = $2', [newHash, user_id]);
 
-        res.json({ message: 'เปลี่ยนรหัสผ่านสำเร็จ!' });
-
+        res.json({ message: 'Password changed successfully!' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });
