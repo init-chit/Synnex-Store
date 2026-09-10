@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Mail, Lock, UserPlus, Eye, EyeOff, Gamepad2 } from 'lucide-react';
+import { User, Mail, Lock, UserPlus, Eye, EyeOff, Gamepad2, ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axios';
 import { showToast } from '../components/ToastContainer';
@@ -57,6 +57,10 @@ function Register() {
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8"><div className="inline-flex items-center gap-3 mb-4"><div className="w-16 h-16 bg-gradient-to-br from-red-600 to-black rounded-xl flex items-center justify-center shadow-lg shadow-red-500/40"><Gamepad2 className="w-8 h-8 text-white" /></div><div className="text-left"><h1 className="text-3xl font-black tracking-tighter text-white italic leading-none">SYNNEX<span className="text-red-400">STORE</span></h1><p className="text-[10px] font-bold text-gray-400 tracking-[0.25em]">GAME STORE</p></div></div></div>
         <div className="bg-white rounded-2xl shadow-2xl p-8 space-y-6 border-2 border-red-500/20">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-red-600 transition-colors" aria-label="Back to home">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </Link>
           <div className="text-center"><div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-red-600 to-red-800 rounded-full mb-4 shadow-lg"><UserPlus className="w-8 h-8 text-white" /></div><h2 className="text-3xl font-bold text-gray-800">Create Account</h2><p className="text-gray-500 mt-2">Create your account to get started</p></div>
           <div className="space-y-4">
             <div><label className="block text-sm font-medium text-gray-700 mb-2">Username</label><div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><User className="h-5 w-5 text-gray-400" /></div><input type="text" name="username" value={formData.username} onChange={handleChange} onKeyPress={handleKeyPress} placeholder="username" required className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-200" /></div></div>
