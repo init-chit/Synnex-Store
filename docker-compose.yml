@@ -32,6 +32,9 @@ services:
       JWT_SECRET: ${JWT_SECRET:-change-this-secret}
       BASE_URL: ${BASE_URL:-http://localhost:3000}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME:-}
+      INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL:-}
+      INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD:-}
     depends_on:
       db:
         condition: service_healthy
