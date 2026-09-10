@@ -19,19 +19,19 @@ const Toast = ({ message, type = 'info', onClose, duration = 3000 }) => {
   };
 
   const bgColors = {
-    success: 'bg-green-50 border-green-200',
-    error: 'bg-red-50 border-red-200',
-    warning: 'bg-yellow-50 border-yellow-200',
-    info: 'bg-blue-50 border-blue-200'
+    success: 'bg-black border-green-400',
+    error: 'bg-black border-red-400',
+    warning: 'bg-black border-yellow-400',
+    info: 'bg-black border-blue-400'
   };
 
   return (
     <div className={`${bgColors[type]} border-2 rounded-lg shadow-lg p-4 min-w-[300px] max-w-md flex items-center gap-3 animate-slide-in`}>
       {icons[type]}
-      <p className="flex-1 text-gray-800 font-medium">{message}</p>
+      <p className="flex-1 text-white font-semibold">{message}</p>
       <button
         onClick={onClose}
-        className="text-gray-400 hover:text-gray-600 transition"
+        className="text-white/70 hover:text-white transition"
       >
         <X size={18} />
       </button>

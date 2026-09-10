@@ -9,6 +9,19 @@ exports.register = async (req, res) => {
     const email = String(req.body.email || '').trim().toLowerCase();
     const password = String(req.body.password || '');
 
+    if (!username || !email || !password) {
+        return res.status(400).json({ message: 'Username, email and password are required' });
+    }
+    if (username.length < 3) {
+        return res.status(400).json({ message: 'Username must be at least 3 characters long' });
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+        return res.status(400).json({ message: 'Please enter a valid email address' });
+    }
+    if (password.length < 8) {
+        return res.status(400).json({ message: 'Password must be at least 8 characters long' });
+    }
+
     try {
         const userCheck = await db.query(
             'SELECT * FROM users WHERE username = $1 OR LOWER(email) = $2',
@@ -31,8 +44,11 @@ exports.register = async (req, res) => {
             user: newUser.rows[0]
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error' });
+        console.error('Registration failed:', err);
+        if (err.code === '23505') {
+            return res.status(400).json({ message: 'Username or email already exists' });
+        }
+        res.status(500).json({ message: 'Unable to create account. Please try again.' });
     }
 };
 

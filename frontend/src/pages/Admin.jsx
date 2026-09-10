@@ -40,9 +40,15 @@ function Admin() {
   });
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    let user = null;
+    try {
+      user = JSON.parse(localStorage.getItem('user') || 'null');
+    } catch {
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+    }
     if (!user || user.role !== 'admin') {
-      alert('หน้านี้สำหรับผู้ดูแลระบบเท่านั้น!');
+      showToast('Administrator access is required.', 'error');
       navigate('/');
       return;
     }
@@ -100,7 +106,10 @@ function Admin() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDashboardStats(res.data);
-    } catch (err) { console.error(err); }
+    } catch (err) {
+      console.error(err);
+      showToast(err.response?.data?.message || 'Unable to load dashboard statistics.', 'error');
+    }
   };
 
   // ===== เพิ่มเกม =====
