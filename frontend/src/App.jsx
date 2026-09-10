@@ -15,10 +15,12 @@ import OrderHistory from './pages/OrderHistory';
 import CompareGames from './pages/CompareGames';
 import ToastContainer from './components/ToastContainer';
 import ThemeToggle from './components/ThemeToggle';
+import BrandingGuard from './components/BrandingGuard';
 
 function App() {
   return (
     <>
+      <BrandingGuard />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
